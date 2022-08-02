@@ -1,9 +1,9 @@
 using DotNetCore.CAP;
+using Savorboard.CAP.InMemoryMessageQueue;
 using FluentValidation;
 using Lib.Products.Domain;
 using Lib.Products.Entities;
 using Microsoft.EntityFrameworkCore;
-using Savorboard.CAP.InMemoryMessageQueue;
 using WebApi.Products.CapSubs;
 using WebApi.Products.Models;
 
@@ -50,14 +50,17 @@ void HandleGetProducts()
 
 async Task<IResult> HandlePostProduct(NewProduct req, IValidator<NewProduct> validator, ICapPublisher bus, ProductsDbContext db)
 {
+    // validate
     var valresult = validator.Validate(req);
     if (!valresult.IsValid)
         return Results.ValidationProblem(valresult.ToDictionary());
 
+    // processing
     var product = new ProductDetail();
 
     await db.SaveChangesAsync();
 
+    // notification
     bus.Publish("xxx.services.show.time", DateTime.Now);
 
     return Results.Created($"/{product.ID}", product);
