@@ -11,6 +11,16 @@ services:
   #     - ACCEPT_EULA=Y
   #     - SA_PASSWORD=mssql1Ipw
 
+  nats:
+    image: 'bitnami/nats:latest'
+    environment:
+      - NATS_ENABLE_AUTH=no
+      - NATS_PASSWORD=dev
+    ports:
+      - 4222:4222
+      - 6222:6222
+      - 8222:8222
+
   postgres:
     image: postgres
     environment:
