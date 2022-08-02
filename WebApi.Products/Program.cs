@@ -43,12 +43,12 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 #region Handlers
-void HandleGetProducts(ICapPublisher bus)
+void HandleGetProducts()
 {
-    bus.Publish("xxx.services.show.time", DateTime.Now);
+    
 }
 
-async Task<IResult> HandlePostProduct(NewProduct req, IValidator<NewProduct> validator, ProductsDbContext db)
+async Task<IResult> HandlePostProduct(NewProduct req, IValidator<NewProduct> validator, ICapPublisher bus, ProductsDbContext db)
 {
     var valresult = validator.Validate(req);
     if (!valresult.IsValid)
@@ -57,6 +57,8 @@ async Task<IResult> HandlePostProduct(NewProduct req, IValidator<NewProduct> val
     var product = new ProductDetail();
 
     await db.SaveChangesAsync();
+
+    bus.Publish("xxx.services.show.time", DateTime.Now);
 
     return Results.Created($"/{product.ID}", product);
 }
