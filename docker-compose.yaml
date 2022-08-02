@@ -1,0 +1,27 @@
+version: '3.9'
+
+services:
+  # mssql:
+  #   image: mcr.microsoft.com/mssql/server:2019-latest
+  #   ports:
+  #     - 1433:1433
+  #   volumes:
+  #     - ./apps/mssql/data:/var/lib/mssqlql/data
+  #   environment:
+  #     - ACCEPT_EULA=Y
+  #     - SA_PASSWORD=mssql1Ipw
+
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-mssql1Ipw}
+      POSTGRES_DB: northwind
+      PGDATA: /data/postgres
+    volumes:
+       - ./apps/postgres/data:/data/postgres
+       - ./db/northwind_ddl.sql:/docker-entrypoint-initdb.d/1-init.sql
+       - ./db/northwind_data.sql:/docker-entrypoint-initdb.d/2-init.sql
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
