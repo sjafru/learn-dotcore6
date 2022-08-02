@@ -18,6 +18,7 @@ namespace Lib.Orders.Entities
 
         public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<OrderDetail> OrderDetails { get; set; }
+        public virtual DbSet<Shipper> Shippers { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -77,6 +78,11 @@ namespace Lib.Orders.Entities
                 entity.Property(e => e.ShipVia).HasColumnName("ship_via");
 
                 entity.Property(e => e.ShippedDate).HasColumnName("shipped_date");
+
+                entity.HasOne(d => d.ShipViaNavigation)
+                    .WithMany(p => p.Orders)
+                    .HasForeignKey(d => d.ShipVia)
+                    .HasConstraintName("orders_ship_via_fkey");
             });
 
             modelBuilder.Entity<OrderDetail>(entity =>
@@ -101,6 +107,24 @@ namespace Lib.Orders.Entities
                     .HasForeignKey(d => d.OrderId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("order_details_order_id_fkey");
+            });
+
+            modelBuilder.Entity<Shipper>(entity =>
+            {
+                entity.ToTable("shippers");
+
+                entity.Property(e => e.ShipperId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("shipper_id");
+
+                entity.Property(e => e.CompanyName)
+                    .IsRequired()
+                    .HasMaxLength(40)
+                    .HasColumnName("company_name");
+
+                entity.Property(e => e.Phone)
+                    .HasMaxLength(24)
+                    .HasColumnName("phone");
             });
 
             OnModelCreatingPartial(modelBuilder);

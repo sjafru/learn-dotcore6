@@ -25,6 +25,7 @@ namespace Lib.Orders.Entities
         public string ShipPostalCode { get; set; }
         public string ShipCountry { get; set; }
 
+        public virtual Shipper ShipViaNavigation { get; set; }
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }
     }
 }
