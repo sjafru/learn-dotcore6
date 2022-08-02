@@ -1,5 +1,7 @@
 # learn-dotcore6
 
+| Minimal APIs are a good starting point for .NET to become lighter and have fewer ceremonies. Each abstraction brings additional cost. We should be trying to cut all the redundant layers to make our code composable and straightforward. CQRS can help with that by giving you the basic rules and skeleton for segregating your application behaviours. Are Minimal APIs and CQRS a perfect match? Nothing is perfect, but I think they’re good enough to at least play with it and consider it a building block in your architecture design.
+
 ## Scaffold Database
 
 Scaffold Contacts DB
