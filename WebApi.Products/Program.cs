@@ -42,13 +42,13 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.MapGet("/products", (ICapPublisher bus) =>
+#region Handlers
+void HandleGetProducts(ICapPublisher bus)
 {
     bus.Publish("xxx.services.show.time", DateTime.Now);
+}
 
-}).WithName("GetProducts").ProducesValidationProblem(400).Produces(200);
-
-app.MapPost("/products", async (NewProduct req, IValidator<NewProduct> validator) =>
+async Task<IResult> HandlePostProduct(NewProduct req, IValidator<NewProduct> validator, ProductsDbContext db)
 {
     var valresult = validator.Validate(req);
     if (!valresult.IsValid)
@@ -56,7 +56,17 @@ app.MapPost("/products", async (NewProduct req, IValidator<NewProduct> validator
 
     var product = new ProductDetail();
 
+    await db.SaveChangesAsync();
+
     return Results.Created($"/{product.ID}", product);
-}).WithName("AddProduct").ProducesValidationProblem(400).Produces(200);
+}
+#endregion
+
+#region Endpoints
+
+app.MapGet("/products", HandleGetProducts).WithName("GetProducts").ProducesValidationProblem(400).Produces(200);
+app.MapPost("/products", HandlePostProduct).WithName("AddProduct").ProducesValidationProblem(400).Produces(200);
+
+#endregion
 
 app.Run();
