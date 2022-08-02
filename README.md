@@ -17,7 +17,7 @@ dotnet ef dbcontext scaffold "Host=localhost;Database=northwind;Username=postgre
 Scaffold Orders DB
 
 ```sh
-dotnet ef dbcontext scaffold "Host=localhost;Database=northwind;Username=postgres;Password=mssql1Ipw" Npgsql.EntityFrameworkCore.PostgreSQL -o Entities -t orders -t order_details -c OrdersDbContext
+dotnet ef dbcontext scaffold "Host=localhost;Database=northwind;Username=postgres;Password=mssql1Ipw" Npgsql.EntityFrameworkCore.PostgreSQL -o Entities -t orders -t order_details -t shippers -c OrdersDbContext
 ```
 
 Scaffold Products DB
