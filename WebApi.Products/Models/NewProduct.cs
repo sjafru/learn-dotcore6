@@ -13,6 +13,8 @@ public class NewProductValidator : AbstractValidator<NewProduct>
 {
     public NewProductValidator()
     {
-        RuleFor(p => p.Name).NotEmpty();
+        RuleFor(p => p.Name).NotEmpty().MinimumLength(3);
+
+        
     }
 }

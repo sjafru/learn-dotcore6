@@ -32,12 +32,11 @@ var summaries = new[]
     "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
 };
 
-app.MapGet("/products", async (ProductsDbContext db) =>
-{
+app.MapGet("/products", async () => {
 
 }).WithName("GetProducts").ProducesValidationProblem(400).Produces(200);
 
-app.MapPost("/products", (NewProduct req, IValidator<NewProduct> validator) =>
+app.MapPost("/products", async (NewProduct req, IValidator<NewProduct> validator) =>
 {
     var valresult = validator.Validate(req);
     if(!valresult.IsValid)
