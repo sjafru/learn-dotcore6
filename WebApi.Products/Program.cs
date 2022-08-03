@@ -6,6 +6,8 @@ using Lib.Products.Entities;
 using Microsoft.EntityFrameworkCore;
 using WebApi.Products.CapSubs;
 using WebApi.Products.Models;
+using Lib.Products.Domain.Events;
+using WebApi.Products.Queries;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,7 +17,11 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
-builder.Services.AddTransient<ISubscriberService, SubscriberService>();
+builder.Services.AddTransient<IFindProducts>();
+
+builder.Services.AddTransient<ISubscriberService>();
+builder.Services.AddTransient<IOnProductCreatedHandler>();
+
 builder.Services.AddCap(x =>
 {
     x.UseDashboard();
@@ -61,7 +67,7 @@ async Task<IResult> HandlePostProduct(NewProduct req, IValidator<NewProduct> val
     await db.SaveChangesAsync();
 
     // notification
-    bus.Publish("xxx.services.show.time", DateTime.Now);
+    bus.Publish(OnProductCreated.NAME, new OnProductCreated(product.ID, "system"));
 
     return Results.Created($"/{product.ID}", product);
 }

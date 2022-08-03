@@ -11,7 +11,7 @@ public interface IOnProductCreatedHandler : ICapSubscribe
 
 public class OnProductCreatedHandler : IOnProductCreatedHandler
 {
-    [CapSubscribe("products.events.oncreated")]
+    [CapSubscribe(OnProductCreated.NAME)]
     public void Do(OnProductCreated @event)
     {
     }
