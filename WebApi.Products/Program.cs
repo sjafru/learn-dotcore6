@@ -17,20 +17,26 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
-builder.Services.AddTransient<IFindProducts>();
+builder.Services.AddTransient<IFindProducts, FindProducts>();
 
-builder.Services.AddTransient<ISubscriberService>();
-builder.Services.AddTransient<IOnProductCreatedHandler>();
+builder.Services.AddTransient<ISubscriberService, SubscriberService>();
+builder.Services.AddTransient<IOnProductCreatedHandler, OnProductCreatedHandler>();
 
 builder.Services.AddCap(x =>
 {
     x.UseDashboard();
 
-    // x.UseEntityFramework<ProductsDbContext>();
-    // x.UseNATS("nats://0.0.0.0:4222");
+    if (builder.Environment.EnvironmentName == "Development")
+    {
+        x.UseInMemoryStorage();
+        x.UseInMemoryMessageQueue();
+    }
+    else
+    {
+        // x.UseEntityFramework<ProductsDbContext>();
+        // x.UseNATS("nats://0.0.0.0:4222");
+    }
 
-    x.UseInMemoryStorage();
-    x.UseInMemoryMessageQueue();
 });
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -49,9 +55,9 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 #region Handlers
-void HandleGetProducts()
+IResult HandleGetProducts(IFindProducts q)
 {
-    
+    return Results.Ok(q.ToList());
 }
 
 async Task<IResult> HandlePostProduct(NewProduct req, IValidator<NewProduct> validator, ICapPublisher bus, ProductsDbContext db)

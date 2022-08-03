@@ -1,18 +1,41 @@
+using System.Collections.ObjectModel;
 using Lib.Products.Domain;
+using Lib.Products.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace WebApi.Products.Queries;
 
 public interface IFindProducts {
     IFindProducts WithProductTypes(IEnumerable<ProductType> types);
     IFindProducts WithCategories(IEnumerable<int> categories);
-    IReadOnlyList<ProductDetail> ToList();
+    ReadOnlyCollection<ProductDetail> ToList();
+
+    ProductDetail Get(int productID);
 }
 
 public class FindProducts : IFindProducts
 {
-    public IReadOnlyList<ProductDetail> ToList()
+    private readonly ProductsDbContext _db;
+
+    public FindProducts(ProductsDbContext db)
     {
-        throw new NotImplementedException();
+        _db = db;
+    }
+
+    public ProductDetail Get(int productID)
+    {
+        var product = _db.Products.Find(productID);
+
+        return new ProductDetail(product);
+    }
+
+    public ReadOnlyCollection<ProductDetail> ToList()
+    {
+        return _db.Products.AsNoTracking()
+                           .ToList()
+                           .Select(o => new ProductDetail(o))
+                           .ToList()
+                           .AsReadOnly();
     }
 
     public IFindProducts WithCategories(IEnumerable<int> categories)
