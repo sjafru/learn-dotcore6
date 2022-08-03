@@ -4,7 +4,7 @@ using FluentValidation;
 using Lib.Products.Domain;
 using Lib.Products.Entities;
 using Microsoft.EntityFrameworkCore;
-using WebApi.Products.CapSubs;
+using WebApi.Products.EventHandlers;
 using WebApi.Products.Models;
 using Lib.Products.Domain.Events;
 using WebApi.Products.Queries;

@@ -2,7 +2,7 @@
 using DotNetCore.CAP;
 using Lib.Products.Domain.Events;
 
-namespace WebApi.Products.CapSubs;
+namespace WebApi.Products.EventHandlers;
 
 public interface IOnProductCreatedHandler : ICapSubscribe
 {

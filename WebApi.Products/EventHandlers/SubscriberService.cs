@@ -1,6 +1,6 @@
 using DotNetCore.CAP;
 
-namespace WebApi.Products.CapSubs;
+namespace WebApi.Products.EventHandlers;
 
 public interface ISubscriberService : ICapSubscribe
 {
