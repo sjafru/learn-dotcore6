@@ -1,4 +1,5 @@
-﻿using Lib.Products.Entities;
+﻿using System.Text.Json.Serialization;
+using Lib.Products.Entities;
 
 namespace Lib.Products.Domain;
 
@@ -23,6 +24,8 @@ public class ProductDetail : IProductDetail
     }
 
     public int ID => _entity.ProductId;
+
+    [JsonPropertyName("product_name")]
     public string ProductName => _entity.ProductName;
 
     public IProductDetail SetProductName(string newName)

@@ -8,6 +8,7 @@ using WebApi.Products.EventHandlers;
 using WebApi.Products.Models;
 using Lib.Products.Domain.Events;
 using WebApi.Products.Queries;
+using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 
