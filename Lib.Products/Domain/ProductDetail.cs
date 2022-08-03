@@ -4,33 +4,33 @@ namespace Lib.Products.Domain;
 
 public interface IProductDetail
 {
-    void SetProductName(string newName);
-    void SetStatus(string status);
+    IProductDetail SetProductName(string newName);
+    IProductDetail SetStatus(string status);
 }
 
 public class ProductDetail : IProductDetail
 {
-    private Product? entity;
+    private Product? _entity;
 
     public ProductDetail()
     {
-        entity = new Product();
+        this._entity = new Product();
     }
 
     public ProductDetail(Product? product)
     {
-        this.entity = product;
+        this._entity = product;
     }
 
-    public int ID => entity.ProductId;
-    public string ProductName => entity.ProductName;
+    public int ID => _entity.ProductId;
+    public string ProductName => _entity.ProductName;
 
-    public void SetProductName(string newName)
+    public IProductDetail SetProductName(string newName)
     {
         throw new NotImplementedException();
     }
 
-    public void SetStatus(string status)
+    public IProductDetail SetStatus(string status)
     {
         throw new NotImplementedException();
     }
